@@ -1,0 +1,59 @@
+@page
+@model Exer3NetCore.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<form method="post" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label asp-for="NewItem.ItemId" class="form-label"></label>
+        <input asp-for="NewItem.ItemId" class="form-control" />
+        <span asp-validation-for="NewItem.ItemId" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="NewItem.ItemName" class="form-label"></label>
+        <input asp-for="NewItem.ItemName" class="form-control" />
+        <span asp-validation-for="NewItem.ItemName" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="NewItem.Size" class="form-label"></label>
+        <input asp-for="NewItem.Size" class="form-control" />
+        <span asp-validation-for="NewItem.Size" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <label asp-for="NewItem.Price" class="form-label"></label>
+        <input asp-for="NewItem.Price" class="form-control" />
+        <span asp-validation-for="NewItem.Price" class="text-danger"></span>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item ID</th>
+            <th>Name</th>
+            <th>Size</th>
+            <th class="text-end">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>@item.ItemId</td>
+            <td>@item.ItemName</td>
+            <td>@item.Size</td>
+            <td class="text-end">@item.Price.ToString("N0")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

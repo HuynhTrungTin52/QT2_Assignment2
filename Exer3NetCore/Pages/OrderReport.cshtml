@@ -1,0 +1,56 @@
+@page
+@model Exer3NetCore.Pages.OrderReportModel
+@{
+    ViewData["Title"] = "Order Report";
+}
+
+<h1>Order Report</h1>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label asp-for="OrderId" class="form-label"></label>
+        <input asp-for="OrderId" class="form-control" />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Load</button>
+    </div>
+    @if (Model.HasOrder)
+    {
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-outline-secondary" formaction="?handler=Export&orderId=@Model.OrderId" formmethod="post">Export PDF</button>
+        </div>
+    }
+</form>
+
+@if (Model.HasOrder)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Order @Model.OrderId</h5>
+            <p class="card-text">Date: @Model.OrderDate.ToString("yyyy-MM-dd")</p>
+            <p class="card-text">Agent: @Model.AgentId</p>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="text-end">Quantity</th>
+                        <th class="text-end">Unit Amount</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var detail in Model.Details)
+                {
+                    <tr>
+                        <td>@detail.ItemId</td>
+                        <td class="text-end">@detail.Quantity</td>
+                        <td class="text-end">@detail.UnitAmount.ToString("N0")</td>
+                        <td class="text-end">@((detail.Quantity * detail.UnitAmount).ToString("N0"))</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

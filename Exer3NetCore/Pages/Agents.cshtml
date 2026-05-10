@@ -1,0 +1,52 @@
+@page
+@model Exer3NetCore.Pages.AgentsModel
+@{
+    ViewData["Title"] = "Agents";
+}
+
+<h1>Agents</h1>
+
+<form method="post" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label asp-for="NewAgent.AgentId" class="form-label"></label>
+        <input asp-for="NewAgent.AgentId" class="form-control" />
+        <span asp-validation-for="NewAgent.AgentId" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="NewAgent.AgentName" class="form-label"></label>
+        <input asp-for="NewAgent.AgentName" class="form-control" />
+        <span asp-validation-for="NewAgent.AgentName" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="NewAgent.Address" class="form-label"></label>
+        <input asp-for="NewAgent.Address" class="form-control" />
+        <span asp-validation-for="NewAgent.Address" class="text-danger"></span>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Agent ID</th>
+            <th>Name</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var agent in Model.Agents)
+    {
+        <tr>
+            <td>@agent.AgentId</td>
+            <td>@agent.AgentName</td>
+            <td>@agent.Address</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
