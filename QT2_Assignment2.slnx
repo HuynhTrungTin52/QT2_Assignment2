@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Exer4MVCNetCore/">
+    <Project Path="Exer4MVCNetCore/Exer4MVCNetCore.csproj" Id="73bbb9c1-7fdb-4bcc-a06f-7515fda2fd3c" />
+  </Folder>
   <Folder Name="/Exercise3/">
     <Project Path="Exer3NetCore/Exer3NetCore.csproj" Id="51d92a26-93c9-480b-a724-213df4e2b6d2" />
   </Folder>

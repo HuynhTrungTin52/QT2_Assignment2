@@ -1,0 +1,113 @@
+@model List<Exer4MVCNetCore.Models.BestItemResult>
+
+@{
+    ViewData["Title"] = "Best Items Report";
+    var agents = ViewBag.Agents as List<Exer4MVCNetCore.Models.Agent> ?? new List<Exer4MVCNetCore.Models.Agent>();
+    var items = ViewBag.Items as List<Exer4MVCNetCore.Models.Item> ?? new List<Exer4MVCNetCore.Models.Item>();
+    var selectedSize = ViewBag.Size as string;
+    var selectedAgent = ViewBag.AgentId as string;
+}
+
+<div class="container mt-4">
+    <h2>Best Items Report</h2>
+    <hr />
+
+    <form method="post" class="mb-4">
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewBag.StartDate">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewBag.EndDate">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="minQuantity" class="form-label">Min Quantity</label>
+                    <input type="number" id="minQuantity" name="minQuantity" class="form-control" value="@ViewBag.MinQuantity">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="size" class="form-label">Size</label>
+                    <select id="size" name="size" class="form-select">
+                        <option value="">-- All Sizes --</option>
+                        @{
+                            var sizes = items.Select(i => i.Size).Distinct();
+                            foreach (var s in sizes)
+                          {
+                            if (selectedSize == s)
+                            {
+                                <option value="@s" selected>@s</option>
+                            }
+                            else
+                            {
+                                <option value="@s">@s</option>
+                            }
+                          }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="agentId" class="form-label">Agent</label>
+                    <select id="agentId" name="agentId" class="form-select">
+                        <option value="">-- All Agents --</option>
+                        @foreach (var agent in agents)
+                        {
+                           if (selectedAgent == agent.AgentId)
+                            {
+                                <option value="@agent.AgentId" selected>@agent.AgentName</option>
+                            }
+                            else
+                            {
+                                <option value="@agent.AgentId">@agent.AgentName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Size</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ItemId</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Size</td>
+                            <td>@item.Revenue.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No data found for the selected filters.</div>
+    }
+</div>

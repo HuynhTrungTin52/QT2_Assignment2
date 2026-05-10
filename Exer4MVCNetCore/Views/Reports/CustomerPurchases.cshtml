@@ -1,0 +1,114 @@
+@model List<Exer4MVCNetCore.Models.CustomerItemResult>
+
+@{
+    ViewData["Title"] = "Customer Purchases Report";
+    var agents = ViewBag.Agents as List<Exer4MVCNetCore.Models.Agent> ?? new List<Exer4MVCNetCore.Models.Agent>();
+    var selectedAgent = ViewBag.SelectedAgentId as string;
+}
+
+<div class="container mt-4">
+    <h2>Customer Purchases Report</h2>
+    <hr />
+
+    <form method="post" class="mb-4">
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="agentId" class="form-label">Select Agent/Customer</label>
+                    <select id="agentId" name="agentId" class="form-select" required>
+                        <option value="">-- Select an Agent --</option>
+                        @foreach (var agent in agents)
+                        {
+                            if (selectedAgent == agent.AgentId)
+                            {
+                                <option value="@agent.AgentId" selected>
+                                    @agent.AgentName (@agent.AgentId)
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@agent.AgentId">
+                                    @agent.AgentName (@agent.AgentId)
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewBag.StartDate">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewBag.EndDate">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Generate Report</button>
+            </div>
+        </div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    @foreach (var error in modelState.Errors)
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                }
+            </div>
+        }
+    </form>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Customer/Agent</th>
+                        <th>Item Name</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal grandTotal = 0;
+                        foreach (var item in Model)
+                        {
+                            grandTotal += item.Total;
+                    <tr>
+                        <td>@item.Customer</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Size</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Total.ToString("C")</td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="table-dark">
+                        <th colspan="4" class="text-end">Grand Total:</th>
+                        <th>@grandTotal.ToString("C")</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(selectedAgent))
+    {
+        <div class="alert alert-info">No purchases found for the selected period.</div>
+    }
+</div>

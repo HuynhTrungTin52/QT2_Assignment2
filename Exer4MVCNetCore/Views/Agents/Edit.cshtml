@@ -1,0 +1,56 @@
+@model Exer4MVCNetCore.Models.Agent
+
+@{
+    ViewData["Title"] = "Edit Agent";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Edit Agent</h2>
+            <hr />
+
+            <form method="post">
+                @Html.AntiForgeryToken()
+                
+                <!-- Hidden field to post the AgentId -->
+                <input type="hidden" asp-for="AgentId">
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            @foreach (var error in modelState.Errors)
+                            {
+                                <p>@error.ErrorMessage</p>
+                            }
+                        }
+                    </div>
+                }
+
+                <div class="form-group mb-3">
+                    <label asp-for="AgentId" class="form-label">Agent ID</label>
+                    <input asp-for="AgentId" class="form-control" disabled>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="AgentName" class="form-label">Agent Name</label>
+                    <input asp-for="AgentName" class="form-control" required>
+                    <span asp-validation-for="AgentName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Update Agent</button>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
