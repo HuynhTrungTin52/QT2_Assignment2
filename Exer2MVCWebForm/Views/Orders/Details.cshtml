@@ -1,0 +1,52 @@
+﻿<hr />
+<h3>Danh sách sản phẩm trong đơn hàng</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
+        {
+            foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@(item.Item != null ? item.Item.ItemName : "N/A")</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitAmount.ToString("N0")</td>
+                    <td>@((item.Quantity * item.UnitAmount).ToString("N0"))</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">Chưa có sản phẩm nào.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Thêm sản phẩm mới:</h4>
+@using (Html.BeginForm("AddDetail", "Orders", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="OrderID" value="@Model.OrderID" />
+    <div class="row">
+        <div class="col-md-4">
+            Chọn món: @Html.DropDownList("ItemID", null, htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            Số lượng: <input type="number" name="Quantity" class="form-control" value="1" min="1" />
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button type="submit" class="btn btn-success">Thêm món</button>
+        </div>
+    </div>
+}
